@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  transactionaloutboxpattern.webapi:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgresql: Server=postgresql;Database=database;User Id=postgres;Password=password;Include Error Detail=true
+    ports:
+      - "80"
+
+  postgresql:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
