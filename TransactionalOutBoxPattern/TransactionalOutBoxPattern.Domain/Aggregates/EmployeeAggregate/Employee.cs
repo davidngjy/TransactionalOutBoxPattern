@@ -2,7 +2,7 @@
 
 namespace TransactionalOutBoxPattern.Domain.Aggregates.EmployeeAggregate;
 
-public sealed class Employee : Entity<Guid>, IAggregateRoot
+public sealed class Employee : AuditableEntity<Guid>, IAggregateRoot
 {
     public Name Name { get; }
 
@@ -34,8 +34,7 @@ public sealed class Employee : Entity<Guid>, IAggregateRoot
     public void MarkTaskAsDone(string name)
     {
         var task = _tasks
-            .Where(x => x.Name == name)
-            .FirstOrDefault();
+            .FirstOrDefault(x => x.Name == name);
 
         if (task is null)
             throw new TaskNotFoundException($"Unable to find task {name}");

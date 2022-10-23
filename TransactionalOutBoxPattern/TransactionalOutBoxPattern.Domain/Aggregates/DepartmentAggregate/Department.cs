@@ -1,6 +1,6 @@
 ﻿namespace TransactionalOutBoxPattern.Domain.Aggregates.DepartmentAggregate;
 
-public class Department : Entity<Guid>, IAggregateRoot
+public class Department : AuditableEntity<Guid>, IAggregateRoot
 {
     public string Name { get; }
 

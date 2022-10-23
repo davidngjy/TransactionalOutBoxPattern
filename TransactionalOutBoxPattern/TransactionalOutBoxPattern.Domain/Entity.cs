@@ -2,20 +2,20 @@
 
 namespace TransactionalOutBoxPattern.Domain;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity
     where TId : struct
 {
     public TId Id { get; }
 
     private readonly List<INotification> _domainEvents = new();
 
-    public IEnumerable<INotification> DomainEvents
+    public IReadOnlyList<INotification> DomainEvents
         => _domainEvents.AsReadOnly();
 
     protected void AddDomainEvent(INotification @event)
         => _domainEvents.Add(@event);
 
-    protected void ClearDomainEvents()
+    public void ClearDomainEvents()
         => _domainEvents.Clear();
 
     protected Entity(TId id) => Id = id;

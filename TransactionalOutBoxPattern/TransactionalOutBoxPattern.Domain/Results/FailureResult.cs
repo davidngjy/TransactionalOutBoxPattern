@@ -1,5 +1,5 @@
 ﻿namespace TransactionalOutBoxPattern.Domain.Results;
 
-public class FailureResult : Result
+public record FailureResult : Result
 {
 }
