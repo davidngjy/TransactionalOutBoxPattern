@@ -21,9 +21,18 @@ internal class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
             .ValueGeneratedNever();
 
         builder
-            .Property(x => x.Name)
-            .HasColumnName("name")
-            .IsRequired();
+            .OwnsOne(
+                x => x.Name,
+                n =>
+                {
+                    n.Property(x => x.FirstName)
+                        .HasColumnName("first_name");
+
+                    n.Property(x => x.LastName)
+                        .HasColumnName("last_name");
+
+                    n.WithOwner();
+                });
 
         builder
             .OwnsOne(

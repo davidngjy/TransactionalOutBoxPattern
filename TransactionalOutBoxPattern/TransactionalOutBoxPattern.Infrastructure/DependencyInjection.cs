@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransactionalOutBoxPattern.Application.Abstraction;
+using TransactionalOutBoxPattern.Domain.Repositories;
 using TransactionalOutBoxPattern.Infrastructure.Persistence;
 using TransactionalOutBoxPattern.Infrastructure.Persistence.Interceptors;
+using TransactionalOutBoxPattern.Infrastructure.Persistence.Repositories;
 
 namespace TransactionalOutBoxPattern.Infrastructure;
 
@@ -12,7 +15,10 @@ public static class DependencyInjection
     {
         services
             .AddScoped<AuditInterceptor>()
-            .AddScoped<DomainEventPublisherInterceptor>();
+            .AddScoped<DomainEventPublisherInterceptor>()
+            .AddTransient<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>())
+            .AddTransient<IDepartmentRepository, DepartmentRepository>()
+            .AddTransient<IEmployeeRepository, EmployeeRepository>();
 
         services
             .AddDbContext<ApplicationDbContext>((provider, builder) =>

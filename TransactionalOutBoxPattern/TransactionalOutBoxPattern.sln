@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionalOutBoxPattern.
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6B201912-A23F-44B2-9F8D-A8863371D65C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalOutBoxPattern.Application", "TransactionalOutBoxPattern.Application\TransactionalOutBoxPattern.Application.csproj", "{29E44C3F-96FE-4F33-8390-C579246C9B26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionalOutBoxPattern.Application", "TransactionalOutBoxPattern.Application\TransactionalOutBoxPattern.Application.csproj", "{29E44C3F-96FE-4F33-8390-C579246C9B26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalOutBoxPattern.Infrastructure", "TransactionalOutBoxPattern.Infrastructure\TransactionalOutBoxPattern.Infrastructure.csproj", "{E33BDB77-8DF1-46B1-8D87-119FB059DA8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionalOutBoxPattern.Infrastructure", "TransactionalOutBoxPattern.Infrastructure\TransactionalOutBoxPattern.Infrastructure.csproj", "{E33BDB77-8DF1-46B1-8D87-119FB059DA8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

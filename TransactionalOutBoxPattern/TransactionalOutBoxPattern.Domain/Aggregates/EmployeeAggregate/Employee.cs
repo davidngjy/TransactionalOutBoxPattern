@@ -25,6 +25,14 @@ public sealed class Employee : AuditableEntity<Guid>, IAggregateRoot
         Salary = salary;
     }
 
+    private Employee() : base(default)
+    {
+        Name = default!;
+        Role = default!;
+        DepartmentId = default!;
+        Salary = default!;
+    }
+
     public void UpdateSalary(decimal amount)
         => Salary = Salary with { Amount = amount };
 

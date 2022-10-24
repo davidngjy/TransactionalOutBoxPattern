@@ -4,7 +4,7 @@ namespace TransactionalOutBoxPattern.Domain.Repositories;
 
 public interface IDepartmentRepository : IRepository<Department>
 {
-    public Department? GetById(Guid id);
+    public Task<Department?> GetByIdAsync(Guid id, CancellationToken token);
 
     public void Add(Department department);
 }
