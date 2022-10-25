@@ -1,4 +1,5 @@
-﻿using TransactionalOutBoxPattern.Domain.Exceptions;
+﻿using TransactionalOutBoxPattern.Domain.DomainEvents;
+using TransactionalOutBoxPattern.Domain.Exceptions;
 
 namespace TransactionalOutBoxPattern.Domain.Aggregates.EmployeeAggregate;
 
@@ -23,6 +24,8 @@ public sealed class Employee : AuditableEntity<Guid>, IAggregateRoot
         Role = role;
         DepartmentId = departmentId;
         Salary = salary;
+
+        AddDomainEvent(new EmployeeAdded(id, salary, departmentId));
     }
 
     private Employee() : base(default)

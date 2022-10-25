@@ -17,6 +17,7 @@ public static class DependencyInjection
             .AddScoped<AuditInterceptor>()
             .AddScoped<DomainEventPublisherInterceptor>()
             .AddTransient<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>())
+            .AddTransient<IDatabaseMigration>(provider => provider.GetRequiredService<ApplicationDbContext>())
             .AddTransient<IDepartmentRepository, DepartmentRepository>()
             .AddTransient<IEmployeeRepository, EmployeeRepository>();
 

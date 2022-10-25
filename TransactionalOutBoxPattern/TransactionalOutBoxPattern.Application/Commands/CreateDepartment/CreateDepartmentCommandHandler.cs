@@ -5,7 +5,7 @@ using TransactionalOutBoxPattern.Domain.Results;
 
 namespace TransactionalOutBoxPattern.Application.Commands.CreateDepartment;
 
-internal class CreateDepartmentCommandHandler : ICommandHandler<CreateDepartmentCommand>
+internal class CreateDepartmentCommandHandler : ICommandHandler<CreateDepartmentCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDepartmentRepository _departmentRepository;
@@ -16,7 +16,7 @@ internal class CreateDepartmentCommandHandler : ICommandHandler<CreateDepartment
         _departmentRepository = departmentRepository;
     }
 
-    public async Task<Result> Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
     {
         var newDepartmentId = Guid.NewGuid();
         var newDepartment = new Department(
@@ -29,6 +29,6 @@ internal class CreateDepartmentCommandHandler : ICommandHandler<CreateDepartment
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Successful;
+        return Result<Guid>.Successful(newDepartmentId);
     }
 }

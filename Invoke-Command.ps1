@@ -9,6 +9,10 @@ function Set-Location-To-Solution {
     Set-Location -Path "$PSScriptRoot\TransactionalOutBoxPattern"
 }
 
+function Revert-Location {
+    Set-Location -Path -
+}
+
 
 function Restore-DotNetTool {
 	Write-Host "Installing required tools..." -ForegroundColor DarkYellow
@@ -33,10 +37,12 @@ if ($Action -eq 'CreateMigration') {
     Set-Location-To-Solution
 	Restore-DotNetTool
     Create-Migration
+    Revert-Location
 }
 
 if ($Action -eq 'RemoveMigration') {
     Set-Location-To-Solution
 	Restore-DotNetTool
     Remove-Migration
+    Revert-Location
 }

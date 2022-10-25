@@ -64,5 +64,14 @@ internal class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
             .HasMany(x => x.Tasks)
             .WithOne()
             .HasForeignKey("EmployeeId");
+
+        builder
+            .Property(x => x.CreatedOn)
+            .HasColumnName("created_on")
+            .IsRequired();
+
+        builder
+            .Property(x => x.ModifiedOn)
+            .HasColumnName("modified_on");
     }
 }
