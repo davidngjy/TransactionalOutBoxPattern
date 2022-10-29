@@ -14,12 +14,11 @@ services.AddInfrastructureServices();
 
 var app = builder.Build();
 
-await app
-    .Services
+app.Services
     .CreateScope()
     .ServiceProvider
     .GetRequiredService<IDatabaseMigration>()
-    .MigrateAsync();
+    .Migrate();
 
 app.UseSwagger();
 app.UseSwaggerUI();

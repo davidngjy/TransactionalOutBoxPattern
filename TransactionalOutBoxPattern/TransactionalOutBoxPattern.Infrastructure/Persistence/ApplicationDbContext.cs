@@ -14,9 +14,9 @@ internal class ApplicationDbContext : DbContext, IDatabaseMigration, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         => modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-    public Task MigrateAsync(CancellationToken token = default) =>
+    public void Migrate() =>
         Policy
             .Handle<Exception>()
-            .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(3))
-            .ExecuteAsync(Database.MigrateAsync, token);
+            .WaitAndRetry(5, _ => TimeSpan.FromSeconds(3))
+            .Execute(Database.Migrate);
 }

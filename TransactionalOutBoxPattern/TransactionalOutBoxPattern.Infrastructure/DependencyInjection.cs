@@ -15,7 +15,7 @@ public static class DependencyInjection
     {
         services
             .AddScoped<AuditInterceptor>()
-            .AddScoped<DomainEventPublisherInterceptor>()
+            .AddScoped<OutboxMessageInterceptor>()
             .AddTransient<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>())
             .AddTransient<IDatabaseMigration>(provider => provider.GetRequiredService<ApplicationDbContext>())
             .AddTransient<IDepartmentRepository, DepartmentRepository>()
@@ -25,12 +25,12 @@ public static class DependencyInjection
             .AddDbContext<ApplicationDbContext>((provider, builder) =>
             {
                 var auditInterceptor = provider.GetRequiredService<AuditInterceptor>();
-                var domainEventPublisherInterceptor = provider.GetRequiredService<DomainEventPublisherInterceptor>();
+                var outboxMessageInterceptor = provider.GetRequiredService<OutboxMessageInterceptor>();
                 var configuration = provider.GetRequiredService<IConfiguration>();
 
                 builder
                     .UseNpgsql(configuration.GetConnectionString("Postgresql"))
-                    .AddInterceptors(auditInterceptor, domainEventPublisherInterceptor);
+                    .AddInterceptors(auditInterceptor, outboxMessageInterceptor);
             });
 
         return services;
