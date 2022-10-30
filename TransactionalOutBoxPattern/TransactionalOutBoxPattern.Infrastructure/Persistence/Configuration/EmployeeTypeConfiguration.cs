@@ -73,5 +73,9 @@ internal class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
         builder
             .Property(x => x.ModifiedOn)
             .HasColumnName("modified_on");
+
+        builder
+            .Navigation(x => x.Tasks)
+            .AutoInclude();
     }
 }

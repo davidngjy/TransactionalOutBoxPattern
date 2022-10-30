@@ -1,4 +1,4 @@
-﻿namespace TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
+﻿namespace TransactionalOutBoxPattern.Infrastructure.IntegrationEventServices.Models;
 
 internal sealed class OutboxMessage
 {

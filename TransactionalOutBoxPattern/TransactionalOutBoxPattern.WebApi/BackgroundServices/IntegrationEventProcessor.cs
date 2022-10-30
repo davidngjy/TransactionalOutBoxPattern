@@ -1,14 +1,14 @@
-﻿using TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
+﻿using TransactionalOutBoxPattern.Application.Abstraction;
 
 namespace TransactionalOutBoxPattern.WebApi.BackgroundServices;
 
-public class OutboxMessageBackgroundService : BackgroundService
+public class IntegrationEventProcessor : BackgroundService
 {
-    private readonly ILogger<OutboxMessageBackgroundService> _logger;
+    private readonly ILogger<IntegrationEventProcessor> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public OutboxMessageBackgroundService(
-        ILogger<OutboxMessageBackgroundService> logger,
+    public IntegrationEventProcessor(
+        ILogger<IntegrationEventProcessor> logger,
         IServiceProvider serviceProvider
     )
     {
@@ -23,14 +23,15 @@ public class OutboxMessageBackgroundService : BackgroundService
             await using var scope = _serviceProvider.CreateAsyncScope();
             try
             {
-                var outboxMessageHandler = scope.ServiceProvider.GetRequiredService<IOutboxMessageHandler>();
-                await outboxMessageHandler.ProcessOutboxMessagesAsync(stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                var integrationEventService = scope.ServiceProvider.GetRequiredService<IIntegrationEventService>();
+                await integrationEventService.ProcessIntegrationEvents(stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
+
+            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
         }
     }
 }

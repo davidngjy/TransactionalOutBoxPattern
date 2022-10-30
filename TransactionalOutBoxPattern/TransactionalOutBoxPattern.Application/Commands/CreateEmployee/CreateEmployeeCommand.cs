@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using TransactionalOutBoxPattern.Application.Abstraction;
 
 namespace TransactionalOutBoxPattern.Application.Commands.CreateEmployee;
 

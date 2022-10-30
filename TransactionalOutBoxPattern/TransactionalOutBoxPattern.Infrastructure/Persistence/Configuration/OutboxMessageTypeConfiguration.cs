@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
+using TransactionalOutBoxPattern.Infrastructure.IntegrationEventServices.Models;
 
 namespace TransactionalOutBoxPattern.Infrastructure.Persistence.Configuration;
 

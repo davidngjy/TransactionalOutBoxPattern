@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TransactionalOutBoxPattern.Domain.Results;
 
-namespace TransactionalOutBoxPattern.Application.Abstraction;
+namespace TransactionalOutBoxPattern.Application.Commands;
 
 internal interface ICommand : IRequest<Result>
 {

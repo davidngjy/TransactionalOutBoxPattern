@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
-services.AddHostedService<OutboxMessageBackgroundService>();
+services.AddHostedService<IntegrationEventProcessor>();
 services.AddSwaggerGen();
 services.AddControllers();
 services.AddApplicationServices();

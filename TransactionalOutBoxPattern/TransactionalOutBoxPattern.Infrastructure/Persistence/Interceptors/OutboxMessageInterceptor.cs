@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using TransactionalOutBoxPattern.Domain;
-using TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
+using TransactionalOutBoxPattern.Infrastructure.IntegrationEventServices.Models;
 
 namespace TransactionalOutBoxPattern.Infrastructure.Persistence.Interceptors;
 
