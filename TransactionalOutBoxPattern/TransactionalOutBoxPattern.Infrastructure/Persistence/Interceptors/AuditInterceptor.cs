@@ -28,10 +28,10 @@ public sealed class AuditInterceptor : SaveChangesInterceptor
         foreach (var entry in entries)
         {
             if (entry.State is EntityState.Added)
-                entry.Property(x => x.CreatedOn).CurrentValue = DateTimeOffset.Now;
+                entry.Property(x => x.CreatedOn).CurrentValue = DateTimeOffset.UtcNow;
 
             if (entry.State is EntityState.Modified)
-                entry.Property(x => x.ModifiedOn).CurrentValue = DateTimeOffset.Now;
+                entry.Property(x => x.ModifiedOn).CurrentValue = DateTimeOffset.UtcNow;
         }
     }
 }

@@ -15,6 +15,10 @@ internal class OutboxMessageTypeConfiguration : IEntityTypeConfiguration<OutboxM
             .HasKey(x => x.EventId);
 
         builder
+            .Property(x => x.EventId)
+            .HasColumnName("event_id");
+
+        builder
             .Property(x => x.Type)
             .HasColumnName("type");
 

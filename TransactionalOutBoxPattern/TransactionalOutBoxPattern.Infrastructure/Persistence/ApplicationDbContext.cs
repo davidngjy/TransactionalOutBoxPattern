@@ -17,6 +17,6 @@ internal class ApplicationDbContext : DbContext, IDatabaseMigration, IUnitOfWork
     public void Migrate() =>
         Policy
             .Handle<Exception>()
-            .WaitAndRetry(5, _ => TimeSpan.FromSeconds(3))
+            .WaitAndRetry(1, _ => TimeSpan.FromSeconds(1))
             .Execute(Database.Migrate);
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System.Text.Json;
 using TransactionalOutBoxPattern.Domain;
 using TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
 
@@ -8,26 +7,21 @@ namespace TransactionalOutBoxPattern.Infrastructure.Persistence.Interceptors;
 
 internal class OutboxMessageInterceptor : SaveChangesInterceptor
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public OutboxMessageInterceptor(ApplicationDbContext dbContext) => _dbContext = dbContext;
-
-    public override async ValueTask<int> SavedChangesAsync(
-        SaveChangesCompletedEventData eventData,
-        int result,
-        CancellationToken cancellationToken = new()
-    )
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = new())
     {
         var dbContext = eventData.Context;
         if (dbContext is not null)
             SaveDomainEvents(dbContext);
 
-        return await base.SavedChangesAsync(eventData, result, cancellationToken);
+        return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
     private void SaveDomainEvents(DbContext dbContext)
     {
-        var messages = dbContext
+        var domainEvents = dbContext
             .ChangeTracker
             .Entries<IEntity>()
             .Select(e => e.Entity)
@@ -40,13 +34,14 @@ internal class OutboxMessageInterceptor : SaveChangesInterceptor
             .Select(@event => new OutboxMessage
             {
                 EventId = Guid.NewGuid(),
-                Type = @event.GetType().FullName ?? throw new Exception($"Unable to resolve the fullname of {@event}"),
-                Content = JsonSerializer.Serialize(@event),
-                OccurredOn = DateTimeOffset.Now
-            });
+                Type = @event.TypeName,
+                Content = @event.SerializedContent,
+                OccurredOn = DateTimeOffset.UtcNow
+            })
+            .ToList();
 
-        _dbContext
+        dbContext
             .Set<OutboxMessage>()
-            .AddRange(messages);
+            .AddRange(domainEvents);
     }
 }

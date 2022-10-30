@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using TransactionalOutBoxPattern.Domain.DomainEvents;
 
 namespace TransactionalOutBoxPattern.Domain;
 
@@ -7,12 +7,12 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity
 {
     public TId Id { get; }
 
-    private readonly List<INotification> _domainEvents = new();
+    private readonly List<IDomainEvent> _domainEvents = new();
 
-    public IReadOnlyList<INotification> DomainEvents
+    public IReadOnlyList<IDomainEvent> DomainEvents
         => _domainEvents.AsReadOnly();
 
-    protected void AddDomainEvent(INotification @event)
+    protected void AddDomainEvent(IDomainEvent @event)
         => _domainEvents.Add(@event);
 
     public void ClearDomainEvents()

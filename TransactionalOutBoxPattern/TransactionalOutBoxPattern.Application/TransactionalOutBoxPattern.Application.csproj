@@ -16,8 +16,4 @@
     <ProjectReference Include="..\TransactionalOutBoxPattern.Domain\TransactionalOutBoxPattern.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EventHandlers\" />
-  </ItemGroup>
-
 </Project>

@@ -5,6 +5,7 @@ using TransactionalOutBoxPattern.Application.Abstraction;
 using TransactionalOutBoxPattern.Domain.Repositories;
 using TransactionalOutBoxPattern.Infrastructure.Persistence;
 using TransactionalOutBoxPattern.Infrastructure.Persistence.Interceptors;
+using TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox;
 using TransactionalOutBoxPattern.Infrastructure.Persistence.Repositories;
 
 namespace TransactionalOutBoxPattern.Infrastructure;
@@ -19,7 +20,8 @@ public static class DependencyInjection
             .AddTransient<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>())
             .AddTransient<IDatabaseMigration>(provider => provider.GetRequiredService<ApplicationDbContext>())
             .AddTransient<IDepartmentRepository, DepartmentRepository>()
-            .AddTransient<IEmployeeRepository, EmployeeRepository>();
+            .AddTransient<IEmployeeRepository, EmployeeRepository>()
+            .AddTransient<IOutboxMessageHandler, OutboxMessageHandler>();
 
         services
             .AddDbContext<ApplicationDbContext>((provider, builder) =>

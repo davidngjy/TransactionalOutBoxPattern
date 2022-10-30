@@ -24,7 +24,8 @@ function Create-Migration {
 
     dotnet ef migrations add $MigrationName `
         -s ".\TransactionalOutBoxPattern.WebApi\TransactionalOutBoxPattern.WebApi.csproj" `
-        -p ".\TransactionalOutBoxPattern.Infrastructure\TransactionalOutBoxPattern.Infrastructure.csproj"
+        -p ".\TransactionalOutBoxPattern.Infrastructure\TransactionalOutBoxPattern.Infrastructure.csproj" `
+		-v
 }
 
 function Remove-Migration {

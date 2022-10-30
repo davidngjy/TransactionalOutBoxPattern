@@ -1,12 +1,14 @@
 using TransactionalOutBoxPattern.Application;
 using TransactionalOutBoxPattern.Infrastructure;
-using TransactionalOutBoxPattern.Infrastructure.Persistence;
+using TransactionalOutBoxPattern.WebApi.BackgroundServices;
+using TransactionalOutBoxPattern.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
+services.AddHostedService<OutboxMessageBackgroundService>();
 services.AddSwaggerGen();
 services.AddControllers();
 services.AddApplicationServices();
@@ -14,11 +16,7 @@ services.AddInfrastructureServices();
 
 var app = builder.Build();
 
-app.Services
-    .CreateScope()
-    .ServiceProvider
-    .GetRequiredService<IDatabaseMigration>()
-    .Migrate();
+app.MigrateDatabase();
 
 app.UseSwagger();
 app.UseSwaggerUI();

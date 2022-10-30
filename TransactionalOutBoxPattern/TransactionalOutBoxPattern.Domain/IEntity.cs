@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using TransactionalOutBoxPattern.Domain.DomainEvents;
 
 namespace TransactionalOutBoxPattern.Domain;
 
 public interface IEntity
 {
-    IReadOnlyList<INotification> DomainEvents { get; }
+    IReadOnlyList<IDomainEvent> DomainEvents { get; }
 
     void ClearDomainEvents();
 }
