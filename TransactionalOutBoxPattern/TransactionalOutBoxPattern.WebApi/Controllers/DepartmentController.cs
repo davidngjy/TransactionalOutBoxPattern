@@ -6,7 +6,7 @@ using TransactionalOutBoxPattern.Application.Commands.CreateEmployee;
 namespace TransactionalOutBoxPattern.WebApi.Controllers;
 
 [ApiController]
-[Route("api/v1/department")]
+[Route("api/v1/departments")]
 public class DepartmentController : ControllerBase
 {
     private readonly ISender _sender;
