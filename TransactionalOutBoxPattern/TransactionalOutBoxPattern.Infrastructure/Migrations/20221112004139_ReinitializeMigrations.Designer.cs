@@ -12,14 +12,15 @@ using TransactionalOutBoxPattern.Infrastructure.Persistence;
 namespace TransactionalOutBoxPattern.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221025090638_add-missing-date-to-employee")]
-    partial class addmissingdatetoemployee
+    [Migration("20221112004139_ReinitializeMigrations")]
+    partial class ReinitializeMigrations
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -71,6 +72,11 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role");
+
                     b.HasKey("Id");
 
                     b.ToTable("employee", (string)null);
@@ -100,6 +106,40 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("task", (string)null);
+                });
+
+            modelBuilder.Entity("TransactionalOutBoxPattern.Infrastructure.IntegrationEventServices.Models.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTimeOffset>("OccurredOn")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_on");
+
+                    b.Property<DateTimeOffset?>("ProcessedOn")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_on");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("outbox_message", (string)null);
                 });
 
             modelBuilder.Entity("TransactionalOutBoxPattern.Domain.Aggregates.EmployeeAggregate.Employee", b =>

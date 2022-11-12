@@ -29,7 +29,7 @@ internal class DepartmentTypeConfiguration : IEntityTypeConfiguration<Department
             .HasColumnName("department_type")
             .HasConversion(
                 x => x.Name,
-                x => DepartmentType.FromName(x, true)
+                x => DepartmentType.FromName(x)
             )
             .IsRequired();
 

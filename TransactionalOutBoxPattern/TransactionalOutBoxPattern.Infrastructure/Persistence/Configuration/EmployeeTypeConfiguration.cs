@@ -21,6 +21,13 @@ internal class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
             .ValueGeneratedNever();
 
         builder
+            .Property(x => x.Role)
+            .HasConversion(
+                x => x.Name,
+                x => Role.FromName(x))
+            .HasColumnName("role");
+
+        builder
             .OwnsOne(
                 x => x.Name,
                 n =>

@@ -1,153 +1,81 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace TransactionalOutBoxPattern.Domain;
 
-public abstract class Enumeration<TEnum, TValue> :
-    IEquatable<Enumeration<TEnum, TValue>>,
-    IComparable<Enumeration<TEnum, TValue>>
-    where TEnum : Enumeration<TEnum, TValue>
-    where TValue : IEquatable<TValue>, IComparable<TValue>
+public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
+    where TEnum : Enumeration<TEnum>
 {
-    public string Name { get; }
-    public TValue Value { get; }
+    private static readonly Dictionary<int, TEnum> Enumerations = GetEnumerations();
 
-    protected Enumeration(string name, TValue value)
+    public string Name { get; }
+    public int Value { get; }
+
+    protected Enumeration(string name, int value)
     {
         Name = name;
         Value = value;
     }
 
-    private static readonly Lazy<TEnum[]> EnumOptions = new(GetAllOptions, LazyThreadSafetyMode.ExecutionAndPublication);
+    public static bool ContainName(string name) =>
+        Enumerations.Values.Any(x => x.Name == name);
 
-    private static readonly Lazy<Dictionary<string, TEnum>> Names =
-        new(() => EnumOptions.Value.ToDictionary(item => item.Name, StringComparer.OrdinalIgnoreCase));
+    public static bool ContainValue(int value) =>
+        Enumerations.ContainsKey(value);
 
-    private static readonly Lazy<Dictionary<TValue, TEnum>> Values =
-        new(() =>
-        {
-            var dictionary = new Dictionary<TValue, TEnum>();
-            foreach (var item in EnumOptions.Value)
-            {
-                if (!dictionary.ContainsKey(item.Value))
-                    dictionary.Add(item.Value, item);
-            }
-
-            return dictionary;
-        });
-
-    private static TEnum[] GetAllOptions()
-        => typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
-            .Select(f => f.GetValue(null))
-            .Cast<TEnum>()
-            .ToArray();
-
-    public static IReadOnlyList<TEnum> List
-        => Names.Value.Values
-            .ToList()
-            .AsReadOnly();
-
-    public static TEnum FromName(string name, bool ignoreCase = true)
+    public static TEnum FromName(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException(nameof(name));
+        var enumeration = Enumerations
+            .Values
+            .FirstOrDefault(x => x.Name == name);
 
-        if (!Names.Value.TryGetValue(name, out var result))
-            throw new ArgumentOutOfRangeException(nameof(name));
+        if (enumeration is null)
+            throw new ArgumentException($"{name} does not exists {typeof(TEnum)}.", nameof(name));
 
-        return result;
+        return enumeration;
     }
 
-    public static bool TryFromName(string name, out TEnum result)
+    public static TEnum FromValue(int value)
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            result = default!;
+        if (Enumerations.ContainsKey(value))
+            return Enumerations[value];
+
+        throw new ArgumentException($"{value} does not exists in {typeof(TEnum)}.", nameof(value));
+    }
+
+    public bool Equals(Enumeration<TEnum>? other)
+    {
+        if (ReferenceEquals(null, other))
             return false;
-        }
 
-        return Names.Value.TryGetValue(name, out result!);
+        return GetType() == other.GetType() &&
+               Value == other.Value;
     }
 
-    public static TEnum FromValue(TValue value)
-    {
-        if (!Values.Value.TryGetValue(value, out var result))
-            throw new ArgumentOutOfRangeException(nameof(value));
-
-        return result;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TEnum FromValue(TValue value, TEnum defaultValue)
-        => !Values.Value.TryGetValue(value, out var result)
-            ? defaultValue
-            : result;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryFromValue(TValue value, out TEnum result)
-        => Values.Value.TryGetValue(value, out result!);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString()
-        => Name;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override int GetHashCode()
-        => Value.GetHashCode();
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj)
-        => (obj is Enumeration<TEnum, TValue> other) && Equals(other);
-
-    public virtual bool Equals(Enumeration<TEnum, TValue>? other)
     {
-        if (ReferenceEquals(this, other))
-            return true;
+        if (obj is Enumeration<TEnum> enumeration)
+            return Equals(enumeration);
 
-        if (other is null)
-            return false;
-
-        return Value.Equals(other.Value);
+        return false;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => left.Equals(right);
+    public override int GetHashCode() => Value.GetHashCode();
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => !(left == right);
+    public override string ToString() => Name;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public virtual int CompareTo(Enumeration<TEnum, TValue>? other)
+    private static Dictionary<int, TEnum> GetEnumerations()
     {
-        if (other is null)
-            return Value.CompareTo(default);
+        var enumerationType = typeof(TEnum);
 
-        return Value.CompareTo(other.Value);
+        var fieldsForType = enumerationType
+            .GetFields(
+                BindingFlags.Public |
+                BindingFlags.Static |
+                BindingFlags.FlattenHierarchy
+            )
+            .Where(fieldInfo => enumerationType.IsAssignableFrom(fieldInfo.FieldType))
+            .Select(fieldInfo => (TEnum)fieldInfo.GetValue(default)!);
+
+        return fieldsForType.ToDictionary(x => x.Value);
     }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => left.CompareTo(right) < 0;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => left.CompareTo(right) <= 0;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => left.CompareTo(right) > 0;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=(Enumeration<TEnum, TValue> left, Enumeration<TEnum, TValue> right)
-        => left.CompareTo(right) >= 0;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator TValue(Enumeration<TEnum, TValue> @enum)
-        => @enum.Value;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator Enumeration<TEnum, TValue>(TValue value)
-        => FromValue(value);
 }

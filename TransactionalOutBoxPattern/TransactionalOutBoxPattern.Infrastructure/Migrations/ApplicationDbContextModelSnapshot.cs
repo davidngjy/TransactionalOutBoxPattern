@@ -17,7 +17,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -69,6 +69,11 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role");
+
                     b.HasKey("Id");
 
                     b.ToTable("employee", (string)null);
@@ -100,7 +105,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                     b.ToTable("task", (string)null);
                 });
 
-            modelBuilder.Entity("TransactionalOutBoxPattern.Infrastructure.Persistence.Outbox.OutboxMessage", b =>
+            modelBuilder.Entity("TransactionalOutBoxPattern.Infrastructure.IntegrationEventServices.Models.OutboxMessage", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
