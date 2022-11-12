@@ -19,4 +19,7 @@ internal class ApplicationDbContext : DbContext, IDatabaseMigration, IUnitOfWork
             .Handle<Exception>()
             .WaitAndRetry(1, _ => TimeSpan.FromSeconds(1))
             .Execute(Database.Migrate);
+
+    public void SetAsQueryMode() =>
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 }

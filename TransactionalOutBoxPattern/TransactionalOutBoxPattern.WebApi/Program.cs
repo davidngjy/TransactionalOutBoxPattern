@@ -1,5 +1,6 @@
 using TransactionalOutBoxPattern.Application;
 using TransactionalOutBoxPattern.Infrastructure;
+using TransactionalOutBoxPattern.WebApi.BackgroundServices;
 using TransactionalOutBoxPattern.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
-//services.AddHostedService<IntegrationEventProcessor>();
+services.AddHostedService<IntegrationEventProcessor>();
 services.AddSwaggerGen();
 services.AddControllers();
 services.AddApplicationServices();
