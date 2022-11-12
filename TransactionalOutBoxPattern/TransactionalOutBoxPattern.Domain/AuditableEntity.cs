@@ -5,7 +5,7 @@ public abstract class AuditableEntity<TId> : Entity<TId>, IAuditableEntity
 {
     public DateTimeOffset CreatedOn { get; } = default;
 
-    public DateTimeOffset? ModifiedOn { get; }
+    public DateTimeOffset ModifiedOn { get; } = default;
 
     protected AuditableEntity(TId id) : base(id)
     {

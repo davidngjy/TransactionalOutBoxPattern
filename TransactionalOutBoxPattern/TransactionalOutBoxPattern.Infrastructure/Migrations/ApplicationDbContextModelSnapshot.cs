@@ -41,7 +41,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("department_type");
 
-                    b.Property<DateTimeOffset?>("ModifiedOn")
+                    b.Property<DateTimeOffset>("ModifiedOn")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 
@@ -65,7 +65,8 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on");
 
-                    b.Property<DateTimeOffset?>("ModifiedOn")
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .IsConcurrencyToken()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 

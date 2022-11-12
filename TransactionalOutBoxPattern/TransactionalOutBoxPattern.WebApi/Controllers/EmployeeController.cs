@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TransactionalOutBoxPattern.Application.Commands.UpdateEmployee;
 using TransactionalOutBoxPattern.Application.Queries.GetEmployee;
 
 namespace TransactionalOutBoxPattern.WebApi.Controllers;
@@ -18,5 +19,14 @@ public class EmployeeController : ControllerBase
     {
         var query = new GetEmployeeQuery(employeeId);
         return Ok(await _sender.Send(query, token));
+    }
+
+    [HttpPost("{employeeId:guid}")]
+    public async Task<IActionResult> UpdateEmployee(
+        Guid employeeId, UpdateEmployeeCommand command, CancellationToken token)
+    {
+        command.EmployeeId = employeeId;
+        await _sender.Send(command, token);
+        return Ok();
     }
 }

@@ -20,7 +20,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                     departmenttype = table.Column<string>(name: "department_type", type: "text", nullable: false),
                     totalsalary = table.Column<decimal>(name: "total_salary", type: "numeric", nullable: false),
                     createdon = table.Column<DateTimeOffset>(name: "created_on", type: "timestamp with time zone", nullable: false),
-                    modifiedon = table.Column<DateTimeOffset>(name: "modified_on", type: "timestamp with time zone", nullable: true)
+                    modifiedon = table.Column<DateTimeOffset>(name: "modified_on", type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +54,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                     departmentid = table.Column<Guid>(name: "department_id", type: "uuid", nullable: false),
                     salaryamount = table.Column<decimal>(name: "salary_amount", type: "numeric", nullable: false),
                     createdon = table.Column<DateTimeOffset>(name: "created_on", type: "timestamp with time zone", nullable: false),
-                    modifiedon = table.Column<DateTimeOffset>(name: "modified_on", type: "timestamp with time zone", nullable: true)
+                    modifiedon = table.Column<DateTimeOffset>(name: "modified_on", type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -27,7 +27,7 @@ internal class EmployeeAddedEventHandler : IDomainEventHandler<EmployeeAdded>
         if (department is null)
             throw new Exception($"Department Id {@event.DepartmentId.Id} not found!");
 
-        department.IncreaseTotalSalary(@event.Salary.Amount);
+        department.AddTotalSalary(@event.Salary.Amount);
 
         var messageIntegrationEvent = new MessageIntegrationEvent<EmployeeAdded>(@event);
         var emailIntegrationEvent = new EmailIntegrationEvent<EmployeeAdded>(@event);

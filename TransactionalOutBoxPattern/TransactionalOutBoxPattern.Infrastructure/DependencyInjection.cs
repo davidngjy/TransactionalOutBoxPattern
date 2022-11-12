@@ -37,7 +37,7 @@ public static class DependencyInjection
                 builder
                     .UseNpgsql(configuration.GetConnectionString("Postgresql"))
                     //.AddInterceptors(auditInterceptor, outboxMessageInterceptor);
-                    .AddInterceptors(auditInterceptor, domainEventInterceptor);
+                    .AddInterceptors(domainEventInterceptor, auditInterceptor);
             });
 
         return services;

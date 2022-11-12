@@ -16,9 +16,6 @@ public class Department : AuditableEntity<Guid>, IAggregateRoot
         DepartmentTotalSalary = 0;
     }
 
-    public void IncreaseTotalSalary(decimal amount)
+    public void AddTotalSalary(decimal amount)
         => DepartmentTotalSalary += amount;
-
-    public void DecreaseTotalSalary(decimal amount)
-        => DepartmentTotalSalary -= amount;
 }

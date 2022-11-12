@@ -13,6 +13,10 @@ internal class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
             .ToTable("employee");
 
         builder
+            .Property(x => x.ModifiedOn)
+            .IsConcurrencyToken();
+
+        builder
             .HasKey(x => x.Id);
 
         builder

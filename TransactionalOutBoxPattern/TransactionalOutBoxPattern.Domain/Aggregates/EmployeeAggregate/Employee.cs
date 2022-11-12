@@ -5,7 +5,7 @@ namespace TransactionalOutBoxPattern.Domain.Aggregates.EmployeeAggregate;
 
 public sealed class Employee : AuditableEntity<Guid>, IAggregateRoot
 {
-    public Name Name { get; }
+    public Name Name { get; private set; }
 
     public Role Role { get; }
 
@@ -36,8 +36,19 @@ public sealed class Employee : AuditableEntity<Guid>, IAggregateRoot
         Salary = default!;
     }
 
-    public void UpdateSalary(decimal amount)
-        => Salary = Salary with { Amount = amount };
+    public void UpdateName(Name newName) => Name = newName;
+
+    public void UpdateSalary(Salary newSalary)
+    {
+        var oldSalary = Salary;
+        Salary = newSalary;
+
+        AddDomainEvent(new EmployeeSalaryUpdated(
+            DepartmentId.Id,
+            oldSalary.Amount,
+            newSalary.Amount)
+        );
+    }
 
     public void AddTask(string name)
         => _tasks.Add(new Task(name));

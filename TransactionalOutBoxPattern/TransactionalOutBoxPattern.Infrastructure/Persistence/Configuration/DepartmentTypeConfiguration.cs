@@ -12,6 +12,10 @@ internal class DepartmentTypeConfiguration : IEntityTypeConfiguration<Department
             .ToTable("department");
 
         builder
+            .Property(x => x.ModifiedOn)
+            .IsConcurrencyToken();
+
+        builder
             .HasKey(x => x.Id);
 
         builder

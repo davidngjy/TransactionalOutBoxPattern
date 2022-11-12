@@ -12,7 +12,7 @@ using TransactionalOutBoxPattern.Infrastructure.Persistence;
 namespace TransactionalOutBoxPattern.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221112004139_ReinitializeMigrations")]
+    [Migration("20221112010819_ReinitializeMigrations")]
     partial class ReinitializeMigrations
     {
         /// <inheritdoc />
@@ -44,7 +44,7 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("department_type");
 
-                    b.Property<DateTimeOffset?>("ModifiedOn")
+                    b.Property<DateTimeOffset>("ModifiedOn")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 
@@ -68,7 +68,8 @@ namespace TransactionalOutBoxPattern.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on");
 
-                    b.Property<DateTimeOffset?>("ModifiedOn")
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .IsConcurrencyToken()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_on");
 
